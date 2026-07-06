@@ -1,0 +1,20 @@
+# Environment
+.env
+
+# Virtual Environment
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Generated files
+data/
+models/
+
+# Notebook
+notebooks/
+
+# VS Code
+.vscode/

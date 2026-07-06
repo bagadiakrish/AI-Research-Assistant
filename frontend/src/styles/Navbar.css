@@ -1,0 +1,17 @@
+nav{
+    background:#1f2937;
+    color:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+nav h1{
+    font-size:32px;
+}
+
+nav p{
+    margin-top:8px;
+    color:#d1d5db;
+}

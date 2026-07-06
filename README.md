@@ -1,51 +1,49 @@
 # AI Research Assistant
 
-An AI-powered PDF Question Answering application built using React, FastAPI, FAISS, Sentence Transformers, and Google Gemini.
+An AI-powered application that lets users upload a PDF and ask natural language questions about its contents.
 
 ## Features
 
 - Upload PDF
-- Automatic text extraction
-- Chunk generation
-- Embedding creation
-- FAISS similarity search
-- AI-powered question answering using Gemini
-- Modern React frontend
+- AI-powered question answering
+- FastAPI backend
+- React frontend
+- Gemini API integration
+- Clean modern UI
 
 ## Tech Stack
 
-Frontend:
+Frontend
 - React
 - Axios
+- CSS
 
-Backend:
+Backend
 - FastAPI
-- Sentence Transformers
+- Python
+- LangChain
 - FAISS
-- PyMuPDF
 - Google Gemini
 
-## Workflow
+## Installation
 
-Upload PDF
-↓
+Backend
 
-Extract Text
-↓
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
-Create Chunks
-↓
+Frontend
 
-Generate Embeddings
-↓
+```bash
+npm install
+npm run dev
+```
 
-Store in FAISS
-↓
+## Future Improvements
 
-Ask Question
-↓
-
-Retrieve Relevant Chunks
-↓
-
-Gemini Generates Answer
+- Authentication
+- Chat History
+- Multiple PDF support
+- Dark Mode

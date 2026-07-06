@@ -1,49 +1,29 @@
 # AI Research Assistant
 
-An AI-powered application that lets users upload a PDF and ask natural language questions about its contents.
+An AI-powered PDF Question Answering application built using React + FastAPI + LangChain + Google Gemini.
 
 ## Features
 
 - Upload PDF
-- AI-powered question answering
-- FastAPI backend
-- React frontend
-- Gemini API integration
-- Clean modern UI
+- AI Question Answering
+- Modern React UI
+- FastAPI Backend
+- Google Gemini Integration
+
+## Screenshot
+
+![App Screenshot](./assets/screenshot.png)
 
 ## Tech Stack
 
-Frontend
 - React
-- Axios
-- CSS
-
-Backend
 - FastAPI
-- Python
 - LangChain
-- FAISS
 - Google Gemini
+- FAISS
+- Python
 
-## Installation
+## Live Demo
 
-Backend
+ai-research-assistant-g1b1.vercel.app
 
-```bash
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
-
-Frontend
-
-```bash
-npm install
-npm run dev
-```
-
-## Future Improvements
-
-- Authentication
-- Chat History
-- Multiple PDF support
-- Dark Mode

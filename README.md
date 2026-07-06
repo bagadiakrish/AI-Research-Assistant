@@ -10,9 +10,6 @@ An AI-powered PDF Question Answering application built using React + FastAPI + L
 - FastAPI Backend
 - Google Gemini Integration
 
-## Screenshot
-
-![App Screenshot](./assets/screenshot.png)
 
 ## Tech Stack
 
@@ -25,5 +22,5 @@ An AI-powered PDF Question Answering application built using React + FastAPI + L
 
 ## Live Demo
 
-ai-research-assistant-g1b1.vercel.app
+https://ai-research-assistant-g1b1.vercel.app/
 

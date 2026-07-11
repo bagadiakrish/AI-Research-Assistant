@@ -3,7 +3,7 @@ import faiss
 import numpy as np
 import google.generativeai as genai
 from sentence_transformers import SentenceTransformer
-
+import os
 from app.config import GEMINI_API_KEY
 
 import fitz
@@ -98,12 +98,22 @@ llm = genai.GenerativeModel(
 embedding_model = SentenceTransformer(
     "all-MiniLM-L6-v2"
 )
-with open("data/chunks.json","r",encoding="utf-8") as file:
-    chunks = json.load(file)
-index = faiss.read_index(
-    "models/faiss.index"
-)
+if os.path.exists("data/chunks.json"):
+    with open("data/chunks.json", "r", encoding="utf-8") as file:
+        chunks = json.load(file)
+else:
+    chunks = []
+
+if os.path.exists("models/faiss.index"):
+    index = faiss.read_index("models/faiss.index")
+else:
+    index = None
 def ask_pdf(question):
+    if index is None or len(chunks) == 0:
+        return "Please upload a PDF first."
+
+    query_embedding = embedding_model.encode([question]).astype("float32")
+    _, indices = index.search(query_embedding, 3)
     """
     Search the PDF using FAISS
     and answer using Gemini.

@@ -98,16 +98,15 @@ llm = genai.GenerativeModel(
 embedding_model = SentenceTransformer(
     "all-MiniLM-L6-v2"
 )
-if os.path.exists("data/chunks.json"):
+
+chunks = []
+index = None
+
+if os.path.exists("data/chunks.json") and os.path.exists("models/faiss.index"):
     with open("data/chunks.json", "r", encoding="utf-8") as file:
         chunks = json.load(file)
-else:
-    chunks = []
 
-if os.path.exists("models/faiss.index"):
     index = faiss.read_index("models/faiss.index")
-else:
-    index = None
 def ask_pdf(question):
     if index is None or len(chunks) == 0:
         return "Please upload a PDF first."

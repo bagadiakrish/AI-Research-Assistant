@@ -7,7 +7,7 @@ from app.config import GEMINI_API_KEY
 
 import fitz
 
-EMBEDDING_MODEL = "models/embedding-001"
+EMBEDDING_MODEL = "models/gemini-embedding-001"
 
 
 def extract_text(pdf_path):
@@ -36,6 +36,8 @@ def create_chunks(text):
 
         chunks.append(chunk)
 
+    os.makedirs("data", exist_ok=True)
+
     with open(
         "data/chunks.json",
         "w",
@@ -45,8 +47,6 @@ def create_chunks(text):
         json.dump(chunks, file)
 
     return chunks
-
-
 def get_embedding(text, task_type="RETRIEVAL_DOCUMENT"):
     result = genai.embed_content(
         model=EMBEDDING_MODEL,
@@ -80,13 +80,14 @@ def create_index(embeddings):
 
     index.add(embeddings)
 
+    os.makedirs("models", exist_ok=True)
+
     faiss.write_index(
         index,
         "models/faiss.index"
     )
 
     return index
-
 
 def process_pdf(pdf_path):
 

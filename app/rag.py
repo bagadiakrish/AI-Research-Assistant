@@ -1,12 +1,14 @@
 import json
 import faiss
 import numpy as np
-import google as genai
-from sentence_transformers import SentenceTransformer
+import google.generativeai as genai
 import os
 from app.config import GEMINI_API_KEY
 
 import fitz
+
+EMBEDDING_MODEL = "models/embedding-001"
+
 
 def extract_text(pdf_path):
 
@@ -20,15 +22,17 @@ def extract_text(pdf_path):
         text += "\n"
 
     return text
+
+
 def create_chunks(text):
 
     chunk_size = 500
 
     chunks = []
 
-    for i in range(0,len(text),chunk_size):
+    for i in range(0, len(text), chunk_size):
 
-        chunk = text[i:i+chunk_size]
+        chunk = text[i:i + chunk_size]
 
         chunks.append(chunk)
 
@@ -38,18 +42,34 @@ def create_chunks(text):
         encoding="utf-8"
     ) as file:
 
-        json.dump(chunks,file)
+        json.dump(chunks, file)
 
     return chunks
+
+
+def get_embedding(text, task_type="RETRIEVAL_DOCUMENT"):
+    result = genai.embed_content(
+        model=EMBEDDING_MODEL,
+        content=text,
+        task_type=task_type
+    )
+    return result["embedding"]
+
+
 def create_embeddings(chunks):
 
-    embeddings = embedding_model.encode(chunks)
+    embeddings = []
+
+    for chunk in chunks:
+        embeddings.append(get_embedding(chunk, task_type="RETRIEVAL_DOCUMENT"))
 
     embeddings = np.array(
         embeddings
     ).astype("float32")
 
     return embeddings
+
+
 def create_index(embeddings):
 
     dimension = embeddings.shape[1]
@@ -66,6 +86,8 @@ def create_index(embeddings):
     )
 
     return index
+
+
 def process_pdf(pdf_path):
 
     global chunks
@@ -90,13 +112,12 @@ def process_pdf(pdf_path):
     print("Done!")
 
     return chunks, index
+
+
 genai.configure(api_key=GEMINI_API_KEY)
 
 llm = genai.GenerativeModel(
     "gemini-2.5-flash"
-)
-embedding_model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
 )
 
 chunks = []
@@ -107,22 +128,23 @@ if os.path.exists("data/chunks.json") and os.path.exists("models/faiss.index"):
         chunks = json.load(file)
 
     index = faiss.read_index("models/faiss.index")
+
+
 def ask_pdf(question):
     if index is None or len(chunks) == 0:
         return "Please upload a PDF first."
 
-    query_embedding = embedding_model.encode([question]).astype("float32")
+    query_embedding = np.array(
+        [get_embedding(question, task_type="RETRIEVAL_QUERY")]
+    ).astype("float32")
+
     _, indices = index.search(query_embedding, 3)
-    """
-    Search the PDF using FAISS
-    and answer using Gemini.
-    """
-    query_embedding=embedding_model.encode([question]).astype("float32")
-    _,indices=index.search(query_embedding,3) 
-    context=""
+
+    context = ""
     for idx in indices[0]:
-        context+=chunks[idx]
+        context += chunks[idx]
         context += "\n\n"
+
     prompt = f"""
     You are an AI Research Assistant.
 

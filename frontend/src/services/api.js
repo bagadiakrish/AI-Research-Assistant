@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://ai-research-assistant-g1b1.vercel.app/"
+    baseURL: import.meta.env.VITE_API_URL
 });
 
 export default API;

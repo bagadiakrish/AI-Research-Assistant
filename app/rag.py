@@ -1,7 +1,7 @@
 import json
 import faiss
 import numpy as np
-from google import genai
+import google.generativeai as genai
 from sentence_transformers import SentenceTransformer
 import os
 from app.config import GEMINI_API_KEY
